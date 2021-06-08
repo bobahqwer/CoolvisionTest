@@ -13,5 +13,5 @@
 - The https://localhost:44326/api/CoolvisionTest/{any date}/{any country} URL will return required in task data. The data will be ordered by "Departure date" field (asc).
 - List of countries: "France,United Kingdom,United States,Australia". List need to be moved to configuration file (if static) or to user UI pickup.
 >Request for any date and any country from list: https://localhost:44326/api/CoolvisionTest
-Request for exact date and any country from list: https://localhost:44326/api/CoolvisionTest/2021-09-01
-Request for exact date and country: https://localhost:44326/api/CoolvisionTest/2021-09-01/France
+>Request for exact date and any country from list: https://localhost:44326/api/CoolvisionTest/2021-09-01
+>Request for exact date and country: https://localhost:44326/api/CoolvisionTest/2021-09-01/France
