@@ -21,7 +21,7 @@ namespace CoolvisionTest.Services
 
             // in case country was specified
             if (!string.IsNullOrEmpty(country))
-                _url += "?search=" + country;
+                _url += "?country=" + country;
 
             // get result from external API
             var _covidCountries = await sendGetRequest<CovidModel>(_url);
@@ -29,7 +29,7 @@ namespace CoolvisionTest.Services
             return _covidCountries;
         }
 
-        public static async Task<CVModel> GetSkyscannerSearch(string country)
+        public static async Task<CVModel> GetSkyscannerSearch(string country, string date)
         {
             var _datesTasks = new List<Task<ScannerModel>>();
             var _airports = await GetSkyscannerAirports(country);
@@ -37,7 +37,9 @@ namespace CoolvisionTest.Services
             // get async skyscanner data for each airport of requered country
             foreach (var airport in _airports.AirportPlaces)
             {
-                var _task = GetSkyscannerDates(airport.PlaceId);
+                if (airport == null) continue;
+
+                var _task = GetSkyscannerDates(airport.PlaceId, date);
                 _datesTasks.Add(_task);
             }
 
@@ -62,10 +64,10 @@ namespace CoolvisionTest.Services
             return _airports;
         }
 
-        public static async Task<ScannerModel> GetSkyscannerDates(string airport)
+        public static async Task<ScannerModel> GetSkyscannerDates(string airport, string date)
         {
             var _url = $"{Configuration.RapidAPIUrl.Skyscanner}/{Configuration.SearchDefaults.Country}/{Configuration.SearchDefaults.Currency}/{Configuration.SearchDefaults.Locale}/{Configuration.SearchDefaults.OriginPlace}" +
-                $"/{airport}/anytime";
+                $"/{airport}/{date}";
 
             // get result from external API
             var _covidCountries = await sendGetRequest<ScannerModel>(_url);
@@ -88,10 +90,10 @@ namespace CoolvisionTest.Services
                     Method = HttpMethod.Get,
                     RequestUri = _uri,
                     Headers =
-                {
-                    { "x-rapidapi-key", Configuration.RapidAPIKey },
-                    { "x-rapidapi-host", _uri.Host },
-                },
+                    {
+                        { "x-rapidapi-key", Configuration.RapidAPIKey },
+                        { "x-rapidapi-host", _uri.Host },
+                    },
                 };
                 using (var _response = await _client.SendAsync(_request))
                 {
@@ -109,7 +111,7 @@ namespace CoolvisionTest.Services
             }
         }
 
-        private static CVModel parseSearchData(List<Task<ScannerModel>> datesTasks) 
+        private static CVModel parseSearchData(List<Task<ScannerModel>> datesTasks)
         {
             var _output = new CVModel { Quotes = new List<CVQuotes>() };
 
@@ -139,8 +141,8 @@ namespace CoolvisionTest.Services
                 _output.Quotes.AddRange(_quotes);
             }
 
-            // order data
-            _output.Quotes = _output.Quotes.OrderBy(q => q.DepartureDate).ToList();
+            // order data by date, then by price
+            _output.Quotes = _output.Quotes.OrderBy(q => q.DepartureDate).ThenBy(q => q.MinPrice).ToList();
 
             return _output;
         }

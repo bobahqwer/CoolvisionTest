@@ -8,8 +8,9 @@ namespace CoolvisionTest.Models
     // Normalized model that will be used for 'our' API(s)/UI(s)
     public class CVModel
     {
+        public CVCountry Country { get; set; }
+
         public List<CVQuotes> Quotes { get; set; }
-        public bool IsCovid { get; set; }
     }
 
     public class CVQuotes
@@ -26,5 +27,11 @@ namespace CoolvisionTest.Models
         public string CountryName { get; set; }
         public string CityName { get; set; }
         public string AirportName { get; set; }
+    }
+
+    public class CVCountry
+    {
+        public string CountryName { get; set; }
+        public int CovidActiveCases { get; set; }
     }
 }

@@ -16,9 +16,10 @@ namespace CoolvisionTest
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{country}",
+                routeTemplate: "api/{controller}/{date}/{country}",
                 defaults: new
                 {
+                    date = RouteParameter.Optional,
                     country = RouteParameter.Optional
                 }
             );

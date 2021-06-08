@@ -9,6 +9,22 @@ namespace CoolvisionTest.Models
         public int Count { get; set; }
 
         [JsonProperty("response")]
-        public List<string> Countries { get; set; }
+        public List<CovidCountry> Countries { get; set; }
+    }
+
+
+    public class CovidCountry 
+    {
+        [JsonProperty("country")]
+        public string CountryName { get; set; }
+
+        [JsonProperty("cases")]
+        public CovidCases Cases { get; set; }
+    }
+
+    public class CovidCases
+    {
+        [JsonProperty("active")]
+        public int Active { get; set; }
     }
 }
