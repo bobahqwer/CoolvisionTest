@@ -10,4 +10,4 @@
 - Get repository from GitHub
 - Run using IIS or IIS Express, use browser or Postman for getting the response. Parse result json using online or other json parser.
 - The https://localhost:44326/api/CoolvisionTest/{any country} URL will return required in task data. The data will be ordered by "Departure date" field (asc).
-> Rejquest example: https://localhost:44326/api/CoolvisionTest/France
+> Request example: https://localhost:44326/api/CoolvisionTest/France
